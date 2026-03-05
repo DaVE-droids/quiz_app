@@ -20,64 +20,65 @@ class ResultScreen extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child: score == totalQuestions
-        ?
-              Text(
-                'Congrats Scholar You got all $score out of $totalQuestions questions correct',
+              child: totalQuestions == 0
+
+        ? Text('You did not attempt any question',
               style:
                 TextStyle(fontSize: 20),
                 textAlign: TextAlign.center,
-              )
+              ):
+              score == totalQuestions ?
+                  Text('You got all $score out of $totalQuestions correct')
                   :
               Text(
                 'You got $score out of $totalQuestions questions correct',
                 style:
                 TextStyle(fontSize: 20),
                 textAlign: TextAlign.center,
-              ),
+              )
+
+
 
             ),
 
 
-            ...List.generate(questions.length, (index){
+            ...List.generate(selectedAnswers.length, (index){
               final correctAnswer = questions[index].correctAnswer;
               final userAnswer = selectedAnswers[index];
               final isCorrect = userAnswer == correctAnswer;
               return Padding(padding: const EdgeInsetsGeometry.all(10),
-                child: Container(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                          questions[index].questionText,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 8,),
+                      Text(
+                        'Your Answer: $userAnswer',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: isCorrect? Colors.green : Colors.red,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      if (!isCorrect)
                         Text(
-                            questions[index].questionText,
+                          'Correct Answer: $correctAnswer',
                           style: TextStyle(
-                            fontWeight: FontWeight.bold,
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold
                           ),
                           textAlign: TextAlign.center,
-                        ),
-                        SizedBox(height: 8,),
-                        Text(
-                          'Your Answer: $userAnswer',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: isCorrect? Colors.green : Colors.red,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        if (!isCorrect)
-                          Text(
-                            'Correct Answer: $correctAnswer',
-                            style: TextStyle(
-                              color: Colors.green,
-                              fontWeight: FontWeight.bold
-                            ),
-                            textAlign: TextAlign.center,
 
-                          )
+                        )
 
-                      ],
-                    ),
+                    ],
                   ),
                 ),
 

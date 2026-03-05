@@ -1,5 +1,4 @@
 
-import 'package:quiz_app/models/question.dart';
 import 'package:quiz_app/questions.dart';
 import 'package:quiz_app/result_screen.dart';
 import 'package:quiz_app/screens/questions_screen.dart';
@@ -24,31 +23,49 @@ class _MyAppState extends State<MyApp> {
 
   List<String> selectedAnswers = [];
 
-  void chooseAnswer (String answer){
+  void chooseAnswer(String answer) {
     setState(() {
-      selectedAnswers.add(answer);
+      if (currentQuestionIndex < selectedAnswers.length) {
+        selectedAnswers[currentQuestionIndex] = answer;
+      } else {
+        selectedAnswers.add(answer);
+      }
+    });
+  }
+
+  void nextQuestion(){
+    setState(() {
       if (currentQuestionIndex < questions.length - 1) {
         currentQuestionIndex++;
       } else {
         quizFinished = true;
       }
     });
+  }
 
+
+  void previousQuestion() {
+    setState(() {
+      if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+      }
+    });
   }
 
 
 
-  int calculateScore(){
-  int correctAnswers = 0;
-  for (int i = 0; i < selectedAnswers.length; i++) {
-  if (selectedAnswers[i] ==
-  (questions[i].correctAnswer)) {
-  // final correctAnswer = questions[i]['correctAnswer'] as String;
-  correctAnswers++;
+  int calculateScore() {
+    int correctAnswers = 0;
+
+    for (int i = 0; i < questions.length; i++) {
+      if (i < selectedAnswers.length &&
+          selectedAnswers[i] == questions[i].correctAnswer) {
+        correctAnswers++;
+      }
+    }
+
+    return correctAnswers;
   }
-  }
-  return correctAnswers;
-}
 
   void startQuiz(){
     setState(() {
@@ -65,6 +82,12 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void endQuiz(){
+    setState(() {
+    quizFinished = true;
+    });
+  }
+
 
   int currentQuestionIndex = 0;
 
@@ -74,7 +97,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final currentQuestion = questions[currentQuestionIndex];
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -85,7 +107,7 @@ class _MyAppState extends State<MyApp> {
             ? ResultScreen(
           restartQuiz: restartQuiz,
           score: calculateScore(),
-          totalQuestions: questions.length,
+          totalQuestions: selectedAnswers.length,
           selectedAnswers: selectedAnswers,
           questions: questions
         )
@@ -93,6 +115,12 @@ class _MyAppState extends State<MyApp> {
           questions: questions,
           currentQuestionIndex: currentQuestionIndex,
           chooseAnswer: chooseAnswer,
+          previousQuestion: previousQuestion,
+          endQuiz: endQuiz,
+          selectedAnswer: currentQuestionIndex < selectedAnswers.length
+          ? selectedAnswers[currentQuestionIndex]
+              :null,
+          nextQuestion: nextQuestion,
         )
       ),
     );
