@@ -28,7 +28,10 @@ class ResultScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
               ):
               score == totalQuestions ?
-                  Text('You got all $score out of $totalQuestions correct')
+                  Text('You got all $score out of $totalQuestions correct',
+                    style:
+                    TextStyle(fontSize: 20),
+                    textAlign: TextAlign.center, )
                   :
               Text(
                 'You got $score out of $totalQuestions questions correct',

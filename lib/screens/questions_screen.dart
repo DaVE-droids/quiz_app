@@ -30,7 +30,34 @@ class QuestionsScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(currentQuestion.questionText),
+            //question counter
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(10)
+              ),
+              child: Text('Question ${currentQuestionIndex+1} / ${questions.length}',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w300,
+              ),
+              ),
+            ),
+
+            const SizedBox(height: 5,),
+            //progress bar
+            LinearProgressIndicator(
+              value: (currentQuestionIndex + 1) / questions.length,
+            ),
+            const SizedBox(height: 10,),
+            //display questions
+            Text(currentQuestion.questionText,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+            ),),
+            //display answers in buttons
             ...currentQuestion.shuffledAnswers.map((answer) {
               final isSelected = answer ==selectedAnswer;
               return Padding(
@@ -38,7 +65,7 @@ class QuestionsScreen extends StatelessWidget {
                 child: SizedBox(
                   width: double.infinity,
                   height: 40,
-                  child: ElevatedButton(
+                  child: OutlinedButton(
                     style:
                     ElevatedButton.styleFrom(
                       backgroundColor: isSelected
@@ -55,7 +82,7 @@ class QuestionsScreen extends StatelessWidget {
             }).toList(),
 
             SizedBox(height: 20,),
-
+            //next/previous buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -76,7 +103,7 @@ class QuestionsScreen extends StatelessWidget {
             ),
 
 
-
+            //submit/end button
             ElevatedButton(
                 onPressed: endQuiz,
                 child:
